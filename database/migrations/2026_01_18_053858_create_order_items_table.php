@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->string('item_type'); // Enum: 'product' or 'service'
+            $table->unsignedBigInteger('item_id');
+            $table->string('item_name');
+            $table->decimal('price', 10, 2);
+            $table->integer('quantity')->default(1);
+            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
     }

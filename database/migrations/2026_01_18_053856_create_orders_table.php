@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('barbershop_id')->constrained()->cascadeOnDelete();
+            $table->string('order_number')->unique();
+            $table->timestamp('order_date');
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('discount', 10, 2)->default(0);
+            $table->string('payment_method'); // Enum handled in model
+            $table->string('status'); // Enum handled in model
+            $table->text('notes')->nullable();
+            $table->foreignId('created_by')->constrained('users')->restrictOnDelete();
             $table->timestamps();
         });
     }
