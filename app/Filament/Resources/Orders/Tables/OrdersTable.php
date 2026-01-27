@@ -115,13 +115,14 @@ class OrdersTable
                     }),
             ])
             ->recordActions([
-               ViewAction::make(),
+               ViewAction::make()->iconButton(),
                 EditAction::make()
-                    ->visible(fn (Order $record) => $record->status === OrderStatus::PENDING),
+                    ->visible(fn (Order $record) => $record->status === OrderStatus::PENDING)->iconButton(),
                 
                 Action::make('markAsPaid')
                     ->label('Mark as Paid')
                     ->icon('heroicon-o-check-circle')
+                    ->iconButton()
                     ->color('success')
                     ->requiresConfirmation()
                     ->visible(fn (Order $record) => $record->status === OrderStatus::PENDING)
@@ -154,6 +155,7 @@ class OrdersTable
                 Action::make('complete')
                     ->label('Complete')
                     ->icon('heroicon-o-check-badge')
+                    ->iconButton()
                     ->color('success')
                     ->requiresConfirmation()
                     ->visible(fn (Order $record) => $record->status === OrderStatus::PAID)
@@ -169,6 +171,7 @@ class OrdersTable
                 Action::make('cancel')
                     ->label('Cancel')
                     ->icon('heroicon-o-x-circle')
+                    ->iconButton()
                     ->color('danger')
                     ->requiresConfirmation()
                     ->modalDescription('Are you sure? This will restore product stock.')
@@ -182,6 +185,12 @@ class OrdersTable
                             ->body('Product stock has been restored')
                             ->send();
                     }),
+                Action::make('print_receipt')
+                    ->label('Print Receipt')
+                    ->icon('heroicon-o-printer')
+                    ->iconButton()
+                    ->url(fn (Order $record): string => route('orders.receipt', $record))
+                    ->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
