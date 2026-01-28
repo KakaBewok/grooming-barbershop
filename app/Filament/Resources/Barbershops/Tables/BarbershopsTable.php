@@ -6,9 +6,9 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class BarbershopsTable
@@ -18,37 +18,22 @@ class BarbershopsTable
         return $table
             ->columns([
                  TextColumn::make('name')
-                    ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
-
+                    ->label('Nama Barbershop'),
                 TextColumn::make('phone')
-                    ->searchable(),
-
+                    ->label('No. Telepon'),
                 TextColumn::make('address')
-                    ->limit(40)
-                    ->searchable(),
-
+                    ->label('Alamat')
+                    ->limit(40),
                 IconColumn::make('is_active')
                     ->label('Active')
-                    ->boolean()
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->boolean(),
             ])
             ->filters([
-                TernaryFilter::make('is_active')
-                    ->label('Active Status')
-                    ->placeholder('All barbershops')
-                    ->trueLabel('Active only')
-                    ->falseLabel('Inactive only'),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
