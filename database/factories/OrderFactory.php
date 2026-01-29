@@ -16,7 +16,6 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'barbershop_id' => Barbershop::factory(),
             'order_number' => Order::generateOrderNumber(),
             'order_date' => fake()->dateTimeBetween('-1 month', 'now'),
             'total_amount' => 0, // Will be calculated from order items

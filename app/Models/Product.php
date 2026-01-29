@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
@@ -14,7 +13,6 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'barbershop_id',
         'name',
         'slug',
         'description',
@@ -42,11 +40,6 @@ class Product extends Model
     }
 
     // Relationships
-    public function barbershop(): BelongsTo
-    {
-        return $this->belongsTo(Barbershop::class);
-    }
-
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');

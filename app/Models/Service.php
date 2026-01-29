@@ -14,7 +14,6 @@ class Service extends Model
     use HasFactory;
 
     protected $fillable = [
-        'barbershop_id',
         'name',
         'slug',
         'description',
@@ -40,11 +39,6 @@ class Service extends Model
     }
 
     // Relationships
-    public function barbershop(): BelongsTo
-    {
-        return $this->belongsTo(Barbershop::class);
-    }
-
     public function images(): HasMany
     {
         return $this->hasMany(ServiceImage::class)->orderBy('sort_order');

@@ -20,27 +20,23 @@ class ServicesTable
     {
         return $table
             ->columns([
-                 TextColumn::make('barbershop.name')
-                    ->sortable()
-                    ->searchable(),
-
                 TextColumn::make('name')
+                    ->label('Nama Jasa')
                     ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
-
+                    ->sortable(),
                 TextColumn::make('price')
+                    ->label('Harga')
                     ->money('IDR')
                     ->sortable(),
 
                 TextColumn::make('crossed_out_price')
-                    ->label('Original Price')
+                    ->label('Harga Coret')
                     ->money('IDR')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('discount_percentage')
-                    ->label('Discount')
+                    ->label('Diskon')
                     ->state(function (Service $record): ?string {
                         if ($record->has_discount) {
                             return round($record->discount_percentage, 0) . '%';
@@ -54,26 +50,15 @@ class ServicesTable
                     ->label('Active')
                     ->boolean()
                     ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('barbershop')
-                    ->relationship('barbershop', 'name')
-                    ->searchable()
-                    ->preload(),
-
                TernaryFilter::make('is_active')
-                    ->label('Active Status')
-                    ->placeholder('All services')
-                    ->trueLabel('Active only')
-                    ->falseLabel('Inactive only'),
-
+                    ->label('Status')
+                    ->placeholder('Semua jasa')
+                    ->trueLabel('Hanya aktif')
+                    ->falseLabel('Hanya non-aktif'),
                Filter::make('has_discount')
-                    ->label('Has Discount')
+                    ->label('Jasa diskon')
                     ->query(fn ($query) => $query->whereNotNull('crossed_out_price')
                         ->whereColumn('crossed_out_price', '>', 'price')),
             ])

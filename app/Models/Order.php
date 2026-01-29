@@ -48,10 +48,6 @@ class Order extends Model
     }
 
     // Relationships
-    public function barbershop(): BelongsTo
-    {
-        return $this->belongsTo(Barbershop::class);
-    }
 
     public function items(): HasMany
     {

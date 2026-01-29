@@ -32,7 +32,6 @@ class ProductFactory extends Factory
         $hasDiscount = fake()->boolean(40);
         
         return [
-            'barbershop_id' => Barbershop::factory(),
             'name' => $name,
             'slug' => \Illuminate\Support\Str::slug($name),
             'description' => fake()->paragraph(2),

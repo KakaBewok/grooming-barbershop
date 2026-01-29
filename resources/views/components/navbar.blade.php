@@ -14,10 +14,9 @@
             <div class="hidden md:flex items-center gap-8">
                 <a href="#hero" class="font-bold uppercase text-sm hover:opacity-70 transition-opacity">Home</a>
                 <a href="#services" class="font-bold uppercase text-sm hover:opacity-70 transition-opacity">Services</a>
-                @if ($barbershop->activeProducts->count() > 0)
-                    <a href="#products"
-                        class="font-bold uppercase text-sm hover:opacity-70 transition-opacity">Products</a>
-                @endif
+                {{-- @if ($barbershop->activeProducts->count() > 0) --}}
+                <a href="#products" class="font-bold uppercase text-sm hover:opacity-70 transition-opacity">Products</a>
+                {{-- @endif --}}
                 @if ($barbershop->images->count() > 0)
                     <a href="#gallery"
                         class="font-bold uppercase text-sm hover:opacity-70 transition-opacity">Gallery</a>
@@ -85,12 +84,12 @@
                 Services
             </a>
 
-            @if ($barbershop->activeProducts->count() > 0)
-                <a href="#products" @click="mobileMenuOpen = false"
-                    class="block px-4 py-3 border-4 border-black dark:border-white font-bold uppercase text-sm hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">
-                    Products
-                </a>
-            @endif
+            {{-- @if ($barbershop->activeProducts->count() > 0) --}}
+            <a href="#products" @click="mobileMenuOpen = false"
+                class="block px-4 py-3 border-4 border-black dark:border-white font-bold uppercase text-sm hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">
+                Products
+            </a>
+            {{-- @endif --}}
 
             @if ($barbershop->images->count() > 0)
                 <a href="#gallery" @click="mobileMenuOpen = false"

@@ -107,7 +107,7 @@ class ProductForm
                             ->reorderable('sort_order')
                             ->collapsible()
                             ->itemLabel(fn (array $state): ?string => 
-                                ($state['is_primary'] ?? false) ? '⭐ Primary Image' : 'Image'
+                                ($state['is_primary'] ?? false) ? '⭐ Gambar Utama' : 'Gambar'
                             )
                             ->columnSpanFull(),
                     ])

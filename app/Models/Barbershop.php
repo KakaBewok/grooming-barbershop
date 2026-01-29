@@ -52,31 +52,6 @@ class Barbershop extends Model
             ->orderBy('sort_order');
     }
 
-    public function services(): HasMany
-    {
-        return $this->hasMany(Service::class);
-    }
-
-    public function activeServices(): HasMany
-    {
-        return $this->hasMany(Service::class)->where('is_active', true);
-    }
-
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
-
-    public function activeProducts(): HasMany
-    {
-        return $this->hasMany(Product::class)->where('is_active', true);
-    }
-
-    public function orders(): HasMany
-    {
-        return $this->hasMany(Order::class);
-    }
-
     // Scopes
     public function scopeActive($query)
     {

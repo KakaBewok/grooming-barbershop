@@ -95,7 +95,7 @@
                 <div class="relative -mx-4 sm:-mx-6 lg:-mx-8">
                     <div class="overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8">
                         <div class="flex gap-6 pb-4" style="scroll-snap-type: x mandatory;">
-                            @foreach ($barbershop->activeServices as $service)
+                            @foreach ($services as $service)
                                 <div class="flex-none w-[85vw] sm:w-100 lg:w-112.5" style="scroll-snap-align: start;">
                                     <x-service-card :service="$service" />
                                 </div>
@@ -106,7 +106,7 @@
 
                 <!-- Scroll Indicator (optional) -->
                 <div class="flex justify-center gap-2 mt-6">
-                    @foreach ($barbershop->activeServices as $index => $service)
+                    @foreach ($services as $index => $service)
                         <div class="w-2 h-2 rounded-full bg-black dark:bg-white opacity-30"></div>
                     @endforeach
                 </div>
@@ -114,7 +114,7 @@
         </section>
 
         <!-- Products Section -->
-        @if ($barbershop->activeProducts->count() > 0)
+        @if ($products->count() > 0)
             <section id="products" class="py-20 px-4 sm:px-6 lg:px-8">
                 <div class="max-w-7xl mx-auto">
                     <div class="text-center mb-12">
@@ -127,7 +127,7 @@
                     <div class="relative -mx-4 sm:-mx-6 lg:-mx-8">
                         <div class="overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8">
                             <div class="flex gap-6 pb-4" style="scroll-snap-type: x mandatory;">
-                                @foreach ($barbershop->activeProducts as $product)
+                                @foreach ($products as $product)
                                     <div class="flex-none w-[75vw] sm:w-[320px] lg:w-90" style="scroll-snap-align: start;">
                                         <x-product-card :product="$product" />
                                     </div>
@@ -138,7 +138,7 @@
 
                     <!-- Scroll Indicator (optional) -->
                     <div class="flex justify-center gap-2 mt-6">
-                        @foreach ($barbershop->activeProducts as $index => $product)
+                        @foreach ($products as $index => $product)
                             <div class="w-2 h-2 rounded-full bg-black dark:bg-white opacity-30"></div>
                         @endforeach
                     </div>
@@ -229,7 +229,7 @@
                             <div class="border-4 border-black dark:border-white p-6 neo-brutal-shadow">
                                 <h3 class="font-bold text-2xl mb-4">Opening Hours</h3>
                                 <div class="space-y-2">
-                                    @foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
+                                    @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
                                         @if ($openingHours->has($day))
                                             <div class="flex justify-between">
                                                 <span class="font-semibold capitalize">{{ $day }}</span>
