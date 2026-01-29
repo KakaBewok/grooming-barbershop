@@ -20,27 +20,21 @@ class ProductsTable
     {
         return $table
             ->columns([
-               TextColumn::make('barbershop.name')
-                    ->sortable()
-                    ->searchable(),
-
                 TextColumn::make('name')
+                    ->label('Nama Produk')
                     ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
-
+                    ->sortable(),
                 TextColumn::make('price')
+                    ->label('Harga')
                     ->money('IDR')
                     ->sortable(),
-
                 TextColumn::make('crossed_out_price')
-                    ->label('Original Price')
+                    ->label('Harga Coret')
                     ->money('IDR')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-
                 TextColumn::make('discount_percentage')
-                    ->label('Discount')
+                    ->label('Diskon')
                     ->state(function (Product $record): ?string {
                         if ($record->has_discount) {
                             return round($record->discount_percentage, 0) . '%';
@@ -51,6 +45,7 @@ class ProductsTable
                     ->color('success'),
 
                 TextColumn::make('stock')
+                    ->label('Stok')
                     ->sortable()
                     ->badge()
                     ->color(fn (int $state): string => match (true) {
@@ -62,41 +57,30 @@ class ProductsTable
                 IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean()
-                    ->sortable(),
-
-                TextColumn::make('created_at')
-                    ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('barbershop')
-                    ->relationship('barbershop', 'name')
-                    ->searchable()
-                    ->preload(),
-
                 TernaryFilter::make('is_active')
-                    ->label('Active Status')
-                    ->placeholder('All products')
-                    ->trueLabel('Active only')
-                    ->falseLabel('Inactive only'),
+                    ->label('Status')
+                    ->placeholder('Semua produk')
+                    ->trueLabel('Hanya aktif')
+                    ->falseLabel('Hanya non-aktif'),
 
                 Filter::make('out_of_stock')
-                    ->label('Out of Stock')
+                    ->label('Stok Habis')
                     ->query(fn ($query) => $query->where('stock', 0)),
 
                 Filter::make('low_stock')
-                    ->label('Low Stock (< 10)')
+                    ->label('Stok Rendah (< 10)')
                     ->query(fn ($query) => $query->where('stock', '<', 10)->where('stock', '>', 0)),
-
                 Filter::make('has_discount')
-                    ->label('Has Discount')
+                    ->label('Produk Diskon')
                     ->query(fn ($query) => $query->whereNotNull('crossed_out_price')
                         ->whereColumn('crossed_out_price', '>', 'price')),
             ])
             ->recordActions([
                EditAction::make(),
-                DeleteAction::make(),
+               DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

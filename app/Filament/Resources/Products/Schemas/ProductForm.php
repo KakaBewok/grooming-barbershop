@@ -68,15 +68,15 @@ class ProductForm
                             ->default(true)
                             ->inline(false),
                     ])->collapsible(),
-                // ini
-                    Section::make('Product Images')
-                    ->description('Upload multiple images for this product')
+                Section::make('Gambar Produk')
+                    ->description('Upload beberapa gambar produk')
                     ->schema([
                         Repeater::make('productImages')
                             ->relationship('images')
+                            ->hiddenLabel()
                             ->schema([
                                 FileUpload::make('image_path')
-                                    ->label('Image')
+                                    ->label('Gambar')
                                     ->image()
                                     ->directory('products')
                                     ->imageEditor()
@@ -91,21 +91,19 @@ class ProductForm
                                     ->columnSpan(2),
 
                                 Toggle::make('is_primary')
-                                    ->label('Primary Image')
-                                    ->helperText('Main product photo')
+                                    ->label('Gambar Utama')
                                     ->inline(false)
                                     ->columnSpan(1),
-
                                 TextInput::make('sort_order')
-                                    ->label('Order')
+                                    ->label('Urutan Tampil')
                                     ->numeric()
-                                    ->default(0)
-                                    ->minValue(0)
+                                    ->default(1)
+                                    ->minValue(1)
                                     ->columnSpan(1),
                             ])
                             ->columns(2)
                             ->defaultItems(1)
-                            ->addActionLabel('Add Image')
+                            ->addActionLabel('Tambah Gambar')
                             ->reorderable('sort_order')
                             ->collapsible()
                             ->itemLabel(fn (array $state): ?string => 
