@@ -32,11 +32,6 @@ class OrdersTable
                     ->copyable()
                     ->copyMessage('Order number copied'),
 
-                TextColumn::make('barbershop.name')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(),
-
                 TextColumn::make('order_date')
                     ->dateTime('d M Y, H:i')
                     ->sortable(),
@@ -88,10 +83,6 @@ class OrdersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('barbershop')
-                    ->relationship('barbershop', 'name')
-                    ->searchable()
-                    ->preload(),
 
                 SelectFilter::make('status')
                     ->options(OrderStatus::options())

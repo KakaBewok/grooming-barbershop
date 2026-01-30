@@ -27,41 +27,70 @@ class OrderForm
     {
         return $schema
             ->components([
-                Section::make('Order Information')
+                Section::make('Informasi Order')
                     ->schema([
-                        Select::make('barbershop_id')
-                            ->relationship('barbershop', 'name')
-                            ->required()
-                            ->searchable()
-                            ->preload()
-                            ->live()
-                            ->afterStateUpdated(fn (Set $set) => $set('items', [])),
-
                         DateTimePicker::make('order_date')
+                            ->label('Waktu Order')
                             ->default(now())
                             ->required()
                             ->seconds(false),
-
                         Select::make('payment_method')
+                            ->label('Metode Pembayaran')
                             ->options(PaymentMethod::options())
                             ->required()
                             ->default(PaymentMethod::CASH->value)
                             ->native(false),
-
                         Select::make('status')
+                            ->label('Status Order')
                             ->options(OrderStatus::options())
                             ->required()
                             ->default(OrderStatus::PENDING->value)
                             ->native(false)
                             ->live(),
-
                         Textarea::make('notes')
+                            ->label('Catatan')
                             ->rows(2)
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
+                // sampe sini
+                Section::make('Totals')
+                    ->schema([
+                        TextInput::make('discount')
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->default(0)
+                            ->minValue(0)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (Get $get, Set $set) {
+                                self::updateTotals($get, $set);
+                            }),
 
-                Section::make('Order Items')
+                        Placeholder::make('total_amount_display')
+                            ->label('Subtotal')
+                            ->content(function (Get $get): string {
+                                $total = (float) $get('total_amount') ?: 0;
+                                return 'Rp ' . number_format($total, 0, ',', '.');
+                            }),
+
+                        Placeholder::make('final_amount')
+                            ->label('Final Amount')
+                            ->content(function (Get $get): string {
+                                $total = (float) $get('total_amount') ?: 0;
+                                $discount = (float) $get('discount') ?: 0;
+                                $final = max(0, $total - $discount);
+                                return 'Rp ' . number_format($final, 0, ',', '.');
+                            })
+                            ->extraAttributes(['class' => 'text-2xl font-bold text-success-600']),
+
+                        Hidden::make('total_amount')
+                            ->default(0)
+                            ->dehydrated(),
+
+                        Hidden::make('created_by')
+                            ->dehydrated(),
+                    ]),
+                    Section::make('Order Items')
                     ->schema([
                         Repeater::make('items')
                             ->relationship()
@@ -80,23 +109,21 @@ class OrderForm
                                 Select::make('item_id')
                                     ->label('Item')
                                     ->options(function (Get $get) {
-                                        $barbershopId = $get('../../barbershop_id');
+                                        // $barbershopId = $get('../../barbershop_id');
                                         $itemType = $get('item_type');
 
-                                        if (!$barbershopId || !$itemType) {
+                                        if (!$itemType) {
                                             return [];
                                         }
 
                                         if ($itemType === ItemType::SERVICE->value) {
-                                            return Service::where('barbershop_id', $barbershopId)
-                                                ->where('is_active', true)
+                                            return Service::where('is_active', true)
                                                 ->pluck('name', 'id')
                                                 ->toArray();
                                         }
 
                                         if ($itemType === ItemType::PRODUCT->value) {
-                                            return Product::where('barbershop_id', $barbershopId)
-                                                ->where('is_active', true)
+                                            return Product::where('is_active', true)
                                                 ->where('stock', '>', 0)
                                                 ->get()
                                                 ->mapWithKeys(fn ($product) => [
@@ -171,8 +198,8 @@ class OrderForm
                                         return 'Rp ' . number_format($subtotal, 0, ',', '.');
                                     }),
                             ])
-                            ->columns(5)
-                            ->defaultItems(0)
+                            ->columns(2)
+                            ->defaultItems(1)
                             ->addActionLabel('Add Item')
                             ->live()
                             ->afterStateUpdated(function (Get $get, Set $set) {
@@ -185,43 +212,6 @@ class OrderForm
                             )
                             ->columnSpanFull()
                             ->minItems(1),
-                    ]),
-
-                Section::make('Totals')
-                    ->schema([
-                        TextInput::make('discount')
-                            ->numeric()
-                            ->prefix('Rp')
-                            ->default(0)
-                            ->minValue(0)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function (Get $get, Set $set) {
-                                self::updateTotals($get, $set);
-                            }),
-
-                        Placeholder::make('total_amount_display')
-                            ->label('Subtotal')
-                            ->content(function (Get $get): string {
-                                $total = (float) $get('total_amount') ?: 0;
-                                return 'Rp ' . number_format($total, 0, ',', '.');
-                            }),
-
-                        Placeholder::make('final_amount')
-                            ->label('Final Amount')
-                            ->content(function (Get $get): string {
-                                $total = (float) $get('total_amount') ?: 0;
-                                $discount = (float) $get('discount') ?: 0;
-                                $final = max(0, $total - $discount);
-                                return 'Rp ' . number_format($final, 0, ',', '.');
-                            })
-                            ->extraAttributes(['class' => 'text-2xl font-bold text-success-600']),
-
-                        Hidden::make('total_amount')
-                            ->default(0)
-                            ->dehydrated(),
-
-                        Hidden::make('created_by')
-                            ->dehydrated(),
                     ])
                     ->columns(3),
             ]);

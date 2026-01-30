@@ -14,7 +14,6 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'barbershop_id',
         'order_number',
         'order_date',
         'total_amount',
