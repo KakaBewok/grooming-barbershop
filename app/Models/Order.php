@@ -22,11 +22,15 @@ class Order extends Model
         'status',
         'notes',
         'created_by',
+        'total_paid',
+        'change_amount',
     ];
 
     protected $casts = [
         'order_date' => 'datetime',
         'total_amount' => 'decimal:2',
+        'total_paid' => 'decimal:2',
+        'change_amount' => 'decimal:2',
         'discount' => 'decimal:2',
         'payment_method' => PaymentMethod::class,
         'status' => OrderStatus::class,
@@ -42,6 +46,10 @@ class Order extends Model
 
             if (empty($order->order_date)) {
                 $order->order_date = now();
+            }
+
+            if (empty($order->created_by) && auth()->check()) {
+                $order->created_by = auth()->id();
             }
         });
     }

@@ -1,6 +1,6 @@
 @props(['service'])
 
-<div class="border-4 border-black dark:border-white bg-white dark:bg-black p-6 neo-brutal-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+<div class="h-full flex flex-col border-4 border-black dark:border-white bg-white dark:bg-black p-6 neo-brutal-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
     x-data="{ showGallery: false }">
 
     <!-- Service Image -->
@@ -13,7 +13,7 @@
     @endif
 
     <!-- Service Info -->
-    <div class="space-y-4">
+    <div class="space-y-4 grow">
         <div>
             <h3 class="font-display text-2xl font-bold mb-2">{{ $service->name }}</h3>
             <p class="opacity-80 text-sm line-clamp-2">{{ $service->description }}</p>

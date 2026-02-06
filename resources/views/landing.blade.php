@@ -91,25 +91,8 @@
                     <p class="text-sm opacity-60">← Swipe to see more →</p>
                 </div>
 
-                <!-- Horizontal Scrollable Container -->
-                <div class="relative -mx-4 sm:-mx-6 lg:-mx-8">
-                    <div class="overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8">
-                        <div class="flex gap-6 pb-4" style="scroll-snap-type: x mandatory;">
-                            @foreach ($services as $service)
-                                <div class="flex-none w-[85vw] sm:w-100 lg:w-112.5" style="scroll-snap-align: start;">
-                                    <x-service-card :service="$service" />
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scroll Indicator (optional) -->
-                <div class="flex justify-center gap-2 mt-6">
-                    @foreach ($services as $index => $service)
-                        <div class="w-2 h-2 rounded-full bg-black dark:bg-white opacity-30"></div>
-                    @endforeach
-                </div>
+                <!-- Livewire Services List with Carousel/Grid & Pagination -->
+                @livewire('services-list')
             </div>
         </section>
 

@@ -19,8 +19,26 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-           EditAction::make()
-                ->visible(fn ($record) => $record->status->value === 'pending'),
+            Actions\Action::make('print')
+                ->label('Print Receipt')
+                ->icon('heroicon-o-printer')
+                ->color('info')
+                ->action(function (\App\Services\ReceiptPrinterService $service) {
+                    if ($service->printOrder($this->record)) {
+                        \Filament\Notifications\Notification::make()
+                            ->success()
+                            ->title('Receipt sent to printer')
+                            ->send();
+                    } else {
+                        \Filament\Notifications\Notification::make()
+                            ->danger()
+                            ->title('Printing failed')
+                            ->body('Please check printer connection.')
+                            ->send();
+                    }
+                }),
+            EditAction::make()
+                 ->visible(fn ($record) => $record->status->value === 'pending'),
         ];
     }
 

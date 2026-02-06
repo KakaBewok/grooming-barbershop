@@ -180,8 +180,21 @@ class OrdersTable
                     ->label('Print Receipt')
                     ->icon('heroicon-o-printer')
                     ->iconButton()
-                    ->url(fn (Order $record): string => route('orders.receipt', $record))
-                    ->openUrlInNewTab(),
+                    ->color('info')
+                    ->action(function (Order $record, \App\Services\ReceiptPrinterService $service) {
+                        if ($service->printOrder($record)) {
+                            Notification::make()
+                                ->success()
+                                ->title('Receipt sent to printer')
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->danger()
+                                ->title('Printing failed')
+                                ->body('Please check printer connection and configuration.')
+                                ->send();
+                        }
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

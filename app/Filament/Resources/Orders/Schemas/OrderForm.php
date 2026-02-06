@@ -87,7 +87,28 @@ class OrderForm
                             ->default(0)
                             ->dehydrated(),
 
+                        TextInput::make('total_paid')
+                            ->label('Bayar')
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (Get $get, Set $set) {
+                                self::updateTotals($get, $set);
+                            }),
+
+                        Placeholder::make('change_amount_display')
+                            ->label('Kembali')
+                            ->content(function (Get $get): string {
+                                $change = (float) $get('change_amount') ?: 0;
+                                return 'Rp ' . number_format($change, 0, ',', '.');
+                            }),
+
+                        Hidden::make('change_amount')
+                            ->default(0)
+                            ->dehydrated(),
+
                         Hidden::make('created_by')
+                            ->default(auth()->id())
                             ->dehydrated(),
                     ]),
                     Section::make('Order Items')
@@ -228,5 +249,15 @@ class OrderForm
         }, 0);
 
         $set('total_amount', $total);
+
+        $discount = (float) $get('discount') ?: 0;
+        $finalAmount = max(0, $total - $discount);
+        $paid = (float) $get('total_paid') ?: 0;
+        
+        if ($paid > 0) {
+            $set('change_amount', max(0, $paid - $finalAmount));
+        } else {
+            $set('change_amount', 0);
+        }
     }
 }

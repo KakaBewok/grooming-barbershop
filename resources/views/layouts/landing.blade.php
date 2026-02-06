@@ -118,6 +118,7 @@
             -webkit-overflow-scrolling: touch;
         }
     </style>
+    @livewireStyles
 </head>
 
 <body class="bg-white dark:bg-black text-black dark:text-white font-sans antialiased">
@@ -134,6 +135,7 @@
     </footer>
 
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>
